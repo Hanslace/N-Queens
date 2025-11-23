@@ -26,8 +26,7 @@ def board_figure(state: List[int], title: Optional[str] = None, square_size: int
             ax.add_patch(rect)
     for c, r in enumerate(state):
         ax.text(c + 0.5, n - 1 - r + 0.5, '♛', fontsize=24, ha='center', va='center')
-    if title:
-        ax.set_title(title)
+
     plt.tight_layout()
     return fig
 

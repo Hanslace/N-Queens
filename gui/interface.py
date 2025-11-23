@@ -18,6 +18,7 @@ import experiments.graphs as graphs_mod
 class AppUI:
     def __init__(self, root):
         self.root = root
+        self.MAX_BOARD_SIZE = 800
         root.title("N-Queens AI — Hill Climbing | A* | CSP")
         root.geometry("1100x720")
         self._build()
@@ -70,18 +71,39 @@ class AppUI:
         self.log_text.insert('end', text + '\n')
         self.log_text.see('end')
 
+    def _resize_board(self, event):
+        """Keep board square AND limit maximum size."""
+        if not self.current_canvas:
+            return
+
+        size = min(event.width, event.height, self.MAX_BOARD_SIZE)
+        
+
+        widget = self.current_canvas.get_tk_widget()
+        widget.place(x=0, y=0, width=size, height=size)
+
     def _update_board(self, state, title=None):
-        # destroy old
+        """Draw board but apply size limit."""
         if self.current_canvas:
             try:
                 self.current_canvas.get_tk_widget().destroy()
-            except Exception:
+            except:
                 pass
+
         fig = board_figure(state, title=title)
         canvas = FigureCanvasTkAgg(fig, master=self.board_container)
         canvas.draw()
-        canvas.get_tk_widget().pack(fill='both', expand=True)
+
         self.current_canvas = canvas
+
+        # Initial sizing (triggered before resize events)
+        w = self.board_container.winfo_width()
+        h = self.board_container.winfo_height()
+        size = min(w, h, self.MAX_BOARD_SIZE)
+
+        widget = canvas.get_tk_widget()
+        widget.place(x=0, y=0, width=size, height=size)
+
 
     def _clear_board(self):
         if self.current_canvas:
