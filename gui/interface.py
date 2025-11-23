@@ -173,17 +173,43 @@ class AppUI:
         self._log("Benchmark complete. Updating dashboard...")
         # update dashboard plots
         fig = self.dash_fig
-        ax = fig.axes[0]
-        ax.clear()
+        fig.clear()
+
+        ax1 = fig.add_subplot(111)
+
         algs = ['Hill', 'A*', 'CSP']
-        success = [results['hill']['success_rate']*100, results['astar']['success_rate']*100, results['csp']['success_rate']*100]
-        runtimes = [results['hill']['avg_runtime'], results['astar']['avg_runtime'], results['csp']['avg_runtime']]
-        x = range(len(algs))
+        success = [
+            results['hill']['success_rate'] * 100,
+            results['astar']['success_rate'] * 100,
+            results['csp']['success_rate'] * 100
+        ]
+        runtimes = [
+            results['hill']['avg_runtime'],
+            results['astar']['avg_runtime'],
+            results['csp']['avg_runtime']
+        ]
+
+        x = np.arange(len(algs))
         width = 0.35
-        ax.bar([xi - width/2 for xi in x], success, width=width, label='Success %')
-        ax.bar([xi + width/2 for xi in x], runtimes, width=width, label='Avg runtime (s)')
-        ax.set_xticks(list(x))
-        ax.set_xticklabels(algs)
-        ax.legend()
+
+        # Success bars
+        bars1 = ax1.bar(x - width/2, success, width, color="tab:blue")
+        ax1.set_ylabel("Success %")
+        ax1.set_xticks(x)
+        ax1.set_xticklabels(algs)
+
+        # Runtime bars (2nd axis)
+        ax2 = ax1.twinx()
+        bars2 = ax2.bar(x + width/2, runtimes, width, color="tab:orange")
+        ax2.set_ylabel("Avg runtime (s)")
+
+        # Single unified legend
+        ax1.legend(
+            [bars1[0], bars2[0]],
+            ["Success %", "Avg runtime (s)"],
+            loc="upper right"
+        )
+
         self.dash_canvas.draw()
+
         self._log("Dashboard updated. You can save graphs from experiments/graphs.py")
