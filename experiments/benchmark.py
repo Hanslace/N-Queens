@@ -2,7 +2,6 @@
 import time
 import statistics
 from algorithms.hill_climbing import steepest_ascent
-from algorithms.a_star import a_star
 from algorithms.csp_solver import csp_mrv_forward
 
 def run_algo(func, n, runs, **kwargs):
@@ -24,9 +23,7 @@ def run_all(n=8, runs=5):
     out = {}
     hill = run_algo(steepest_ascent, n, runs, max_restarts=30, max_steps_per_restart=1000)
     out['hill'] = summarize(hill)
-    ast = run_algo(a_star, n, runs)
-    out['astar'] = summarize(ast)
     csp = run_algo(csp_mrv_forward, n, runs)
     out['csp'] = summarize(csp)
     # normalize keys for GUI
-    return {'hill': out['hill'], 'astar': out['astar'], 'csp': out['csp']}
+    return {'hill': out['hill'], 'csp': out['csp']}

@@ -20,11 +20,6 @@ def make_alg_panels(parent, callbacks):
     ttk.Entry(hill_frame, textvariable=widgets['hc_steps'], width=8).grid(row=1, column=1, sticky='w', padx=6)
     ttk.Button(hill_frame, text="Run Hill Climbing", command=callbacks.get('run_hill')).grid(row=2, column=0, columnspan=2, pady=6)
 
-    # A* panel
-    astar_frame = ttk.LabelFrame(parent, text="A* Search", padding=6)
-    astar_frame.pack(fill='x', pady=4)
-    ttk.Label(astar_frame, text="(heuristic: attacking pairs)").grid(row=0, column=0, sticky='w')
-    ttk.Button(astar_frame, text="Run A*", command=callbacks.get('run_astar')).grid(row=1, column=0, pady=6)
 
     # CSP panel
     csp_frame = ttk.LabelFrame(parent, text="CSP (MRV + Forward Checking)", padding=6)
